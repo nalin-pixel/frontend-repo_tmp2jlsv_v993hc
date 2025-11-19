@@ -1,73 +1,50 @@
-function App() {
+import { Routes, Route, Link } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import { LoginForm, RegisterForm } from './components/AuthForms'
+import Dashboard from './components/Dashboard'
+
+function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
-
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
-            </div>
-
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
-
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
+    <div>
+      <Hero />
+      <section className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-6">
+        {[{
+          title: 'Role-based access', desc: 'Separate dashboards for teachers and students'
+        }, { title: 'Announcements', desc: 'Share updates with the whole school' }, { title: 'Courses', desc: 'Organize classes and enroll students' }].map((f, i) => (
+          <div key={i} className="bg-white rounded-xl p-6 border">
+            <h3 className="font-semibold text-lg">{f.title}</h3>
+            <p className="text-slate-600 mt-1">{f.desc}</p>
           </div>
+        ))}
+      </section>
+      <section className="bg-slate-50 border-t">
+        <div className="max-w-6xl mx-auto px-6 py-10 text-center text-slate-600">Built for simplicity. Secure by design.</div>
+      </section>
+    </div>
+  )
+}
 
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
-          </div>
-        </div>
+function Page({ title, children }) {
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
+      <div className="max-w-md mx-auto px-6 py-10">
+        <h1 className="text-2xl font-bold mb-6">{title}</h1>
+        <div className="bg-white border rounded-xl p-6 shadow-sm">{children}</div>
       </div>
     </div>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <Routes>
+      <Route index element={<div className="min-h-screen bg-slate-50"><Navbar /><Home /></div>} />
+      <Route path="/login" element={<Page title="Sign In"><LoginForm /></Page>} />
+      <Route path="/register" element={<Page title="Create your account"><RegisterForm /></Page>} />
+      <Route path="/dashboard" element={<div className="min-h-screen bg-slate-50"><Navbar /><Dashboard /></div>} />
+      <Route path="*" element={<div className="p-6"><Link to="/">Go Home</Link></div>} />
+    </Routes>
+  )
+}
